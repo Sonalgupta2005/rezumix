@@ -36,3 +36,34 @@ export async function POST(req) {
     );
   }
 }
+
+export async function GET(req) {
+  try {
+    const auth = await requireSession();
+    if (auth.error) return auth.error;
+    const { session } = auth;
+
+    await connectDB();
+
+    // Fetch the most recently updated resume for this user
+    const resume = await Resume.findOne({ userEmail: session.user.email }).sort({ updatedAt: -1 });
+
+    if (!resume) {
+      return NextResponse.json(
+        { success: false, message: "No resume found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, message: "Resume fetched successfully", resume },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error fetching resume:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

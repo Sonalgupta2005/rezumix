@@ -30,15 +30,37 @@ export default function BuilderPage() {
   const [suggestions, setSuggestions] = useState(null);
   const [suggesting, setSuggesting] = useState(false);
 
- useEffect(() => {
-  const saved = localStorage.getItem("resumeBuilderData");
-  if (saved) {
-    setResumeData(JSON.parse(saved));
-    setIsSample(false);
-  } else {
-    setIsSample(true);
-  }
-}, []);
+  useEffect(() => {
+    async function loadSavedResume() {
+      if (status !== "authenticated") return;
+      try {
+        const res = await fetch("/api/resume");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success && data.resume) {
+            setResumeData(data.resume);
+            if (data.resume.template) {
+              setActiveTemplate(data.resume.template);
+            }
+            setIsSample(false);
+            return;
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load saved resume", err);
+      }
+      
+      // Fallback to localStorage if no DB save exists
+      const saved = localStorage.getItem("resumeBuilderData");
+      if (saved) {
+        setResumeData(JSON.parse(saved));
+        setIsSample(false);
+      } else {
+        setIsSample(true);
+      }
+    }
+    loadSavedResume();
+  }, [status]);
 
   useEffect(() => {
   if (!isSample) {
@@ -59,7 +81,7 @@ export default function BuilderPage() {
       const res = await fetch("/api/resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userEmail, ...resumeData }),
+        body: JSON.stringify({ userEmail, template: activeTemplate, ...resumeData }),
       });
       const data = await res.json();
       setSaveMsg(data.success ? "✅ Saved!" : "❌ Error");
