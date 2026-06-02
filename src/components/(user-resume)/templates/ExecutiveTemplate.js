@@ -9,7 +9,15 @@ const gold = "#8B7355";
 const divider = { borderBottom: "1px solid #d4c5a9", marginBottom: "12px", paddingBottom: "4px" };
 
 export default function ExecutiveTemplate({ data }) {
-  const { personalInfo, experience, education, skills, projects, certifications } = data;
+  const personalInfo = data?.personalInfo || {};
+  const experience = data?.experience || [];
+  const education = data?.education || [];
+  const skills = {
+    technical: data?.skills?.technical || data?.skills?.[0]?.technical || [],
+    soft: data?.skills?.soft || data?.skills?.[0]?.soft || [],
+  };
+  const projects = data?.projects || [];
+  const certifications = data?.certifications || [];
 
   return (
     <div style={{ backgroundColor: "#ffffff", color: "#1a1a1a", fontSize: "12px", fontFamily: "'Georgia', serif", padding: "40px 48px" }}>

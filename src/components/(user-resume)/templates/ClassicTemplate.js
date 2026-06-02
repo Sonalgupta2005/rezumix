@@ -10,7 +10,15 @@ function fmt(dateStr) {
 const breakWord = { wordBreak: "break-word", overflowWrap: "break-word" };
 
 export default function ClassicTemplate({ data }) {
-  const { personalInfo, experience, education, skills, projects, certifications } = data;
+  const personalInfo = data?.personalInfo || {};
+  const experience = data?.experience || [];
+  const education = data?.education || [];
+  const skills = {
+    technical: data?.skills?.technical || data?.skills?.[0]?.technical || [],
+    soft: data?.skills?.soft || data?.skills?.[0]?.soft || [],
+  };
+  const projects = data?.projects || [];
+  const certifications = data?.certifications || [];
 
   return (
     <div style={{ backgroundColor: "#ffffff", color: "#111827", fontSize: "13px", fontFamily: "'Times New Roman', Times, serif", padding: "40px" }}>

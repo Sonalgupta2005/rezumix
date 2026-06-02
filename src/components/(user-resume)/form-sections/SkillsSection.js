@@ -2,7 +2,7 @@
 
 import { useState, memo } from "react";
 
-function TagInput({ label, tags, onAdd, onRemove, placeholder }) {
+function TagInput({ label, tags = [], onAdd, onRemove, placeholder }) {
   const [input, setInput] = useState("");
 
   const handleKeyDown = (e) => {

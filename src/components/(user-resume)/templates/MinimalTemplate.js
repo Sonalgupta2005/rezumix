@@ -8,7 +8,15 @@ function fmt(dateStr) {
 }
 
 export default function MinimalTemplate({ data }) {
-  const { personalInfo, experience, education, skills, projects, certifications } = data;
+  const personalInfo = data?.personalInfo || {};
+  const experience = data?.experience || [];
+  const education = data?.education || [];
+  const skills = {
+    technical: data?.skills?.technical || data?.skills?.[0]?.technical || [],
+    soft: data?.skills?.soft || data?.skills?.[0]?.soft || [],
+  };
+  const projects = data?.projects || [];
+  const certifications = data?.certifications || [];
 
   return (
     <div className="bg-white text-gray-800 px-10 py-9 text-[13px]"

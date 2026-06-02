@@ -63,37 +63,40 @@ export default function ResumeForm({ resumeData, updateResumeData }) {
       <div className="flex-1 overflow-y-auto p-6">
         {activeSection === "personal" && (
           <PersonalInfoSection
-            data={resumeData.personalInfo}
+            data={resumeData?.personalInfo || {}}
             onChange={handlePersonalChange}
           />
         )}
         {activeSection === "experience" && (
           <ExperienceSection
-            data={resumeData.experience}
+            data={resumeData?.experience || []}
             onChange={handleExperienceChange}
           />
         )}
         {activeSection === "education" && (
           <EducationSection
-            data={resumeData.education}
+            data={resumeData?.education || []}
             onChange={handleEducationChange}
           />
         )}
         {activeSection === "skills" && (
           <SkillsSection
-            data={resumeData.skills}
+            data={{
+              technical: resumeData?.skills?.technical || resumeData?.skills?.[0]?.technical || [],
+              soft: resumeData?.skills?.soft || resumeData?.skills?.[0]?.soft || []
+            }}
             onChange={handleSkillsChange}
           />
         )}
         {activeSection === "projects" && (
           <ProjectsSection
-            data={resumeData.projects}
+            data={resumeData?.projects || []}
             onChange={handleProjectsChange}
           />
         )}
         {activeSection === "certifications" && (
           <CertificationsSection
-            data={resumeData.certifications}
+            data={resumeData?.certifications || []}
             onChange={handleCertificationsChange}
           />
         )}
