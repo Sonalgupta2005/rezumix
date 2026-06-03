@@ -9,12 +9,12 @@ import CreativeTemplate from "@/components/(user-resume)/templates/CreativeTempl
 export default function ResumePreview({ resumeData, activeTemplate, isSample }) {
   const isEmpty =
     !isSample &&
-    !resumeData.personalInfo.fullName &&
-    !resumeData.personalInfo.email &&
-    resumeData.experience.length === 0 &&
-    resumeData.skills.technical.length === 0 &&
-    resumeData.skills.soft.length === 0 &&
-    resumeData.education.length === 0;
+    !resumeData?.personalInfo?.fullName &&
+    !resumeData?.personalInfo?.email &&
+    (resumeData?.experience?.length || 0) === 0 &&
+    (resumeData?.skills?.technical?.length || 0) === 0 &&
+    (resumeData?.skills?.soft?.length || 0) === 0 &&
+    (resumeData?.education?.length || 0) === 0;
 
   return (
     <div className="p-6 flex flex-col items-center bg-gray-950">

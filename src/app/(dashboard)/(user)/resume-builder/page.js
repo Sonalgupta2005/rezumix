@@ -81,7 +81,7 @@ export default function BuilderPage() {
       const res = await fetch("/api/resume", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userEmail, template: activeTemplate, ...resumeData }),
+        body: JSON.stringify({ userEmail, ...resumeData, template: activeTemplate }),
       });
       const data = await res.json();
       setSaveMsg(data.success ? "✅ Saved!" : "❌ Error");
