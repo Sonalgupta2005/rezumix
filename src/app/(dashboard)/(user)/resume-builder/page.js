@@ -38,9 +38,12 @@ export default function BuilderPage() {
         if (res.ok) {
           const data = await res.json();
           if (data.success && data.resume) {
-            setResumeData(data.resume);
-            if (data.resume.template) {
-              setActiveTemplate(data.resume.template);
+            // Strip MongoDB metadata before setting state
+            const { _id, __v, createdAt, updatedAt, userEmail, ...cleanResume } = data.resume;
+            
+            setResumeData(cleanResume);
+            if (cleanResume.template) {
+              setActiveTemplate(cleanResume.template);
             }
             setIsSample(false);
             return;
@@ -51,11 +54,16 @@ export default function BuilderPage() {
       }
       
       // Fallback to localStorage if no DB save exists
-      const saved = localStorage.getItem("resumeBuilderData");
-      if (saved) {
-        setResumeData(JSON.parse(saved));
-        setIsSample(false);
-      } else {
+      try {
+        const saved = localStorage.getItem("resumeBuilderData");
+        if (saved) {
+          setResumeData(JSON.parse(saved));
+          setIsSample(false);
+        } else {
+          setIsSample(true);
+        }
+      } catch (parseError) {
+        console.error("Failed to parse local storage resume", parseError);
         setIsSample(true);
       }
     }
